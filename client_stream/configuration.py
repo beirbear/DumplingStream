@@ -1,6 +1,6 @@
 class Setting(object):
     __node_name = 'Node1'
-    __node_address = 'localhost'
+    __node_addr = 'localhost'
     __com_addr = '127.0.0.1'
     __com_port = 8080
     __dynamic_token = "None"
@@ -66,7 +66,7 @@ class Setting(object):
 
             try:
                 Setting.__node_name = data['node_name']
-                Setting.__node_address = data['node_addr']
+                Setting.__node_addr = data['node_addr']
                 Setting.__com_addr = data['server_addr']
                 Setting.__com_port = data['com_port']
                 Setting.__dynamic_token = data['token']
@@ -83,8 +83,8 @@ class Setting(object):
         return Setting.__node_name
 
     @staticmethod
-    def get_node_address():
-        return Setting.__node_address
+    def get_node_addr():
+        return Setting.__node_addr
 
     @staticmethod
     def set_node_name(new_name):
