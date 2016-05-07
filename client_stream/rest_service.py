@@ -52,11 +52,11 @@ class RequestStatusUpdate(object):
         """
         Get machine status by calling a unix command and fetch for load average
         """
-        res = subprocess.check_output(Setting.get_cpu_load_command())
-        *_, load1, load5, load15 = res.split(b" ")
-        # print("Load1: {0}, Load5: {1}, Load15: {2}".format(load1, load5, load15))
-
-        return load1, load5, load15
+        #res = subprocess.check_output(Setting.get_cpu_load_command())
+        #*_, load1, load5, load15 = res.split(b" ")
+        ## print("Load1: {0}, Load5: {1}, Load15: {2}".format(load1, load5, load15))
+        pass
+        # return load1, load5, load15
 
     def on_get(self, req, res):
         """
@@ -112,7 +112,7 @@ class RESTService(object):
         api.add_route('/report', ReportStat())
 
         # Establishing a REST server
-        self.__server = make_server(Setting.get_local_com_addr(), Setting.get_local_com_port(), api)
+        self.__server = make_server(Setting.get_com_addr(), Setting.get_com_port(), api)
         self.__commander = commander
 
     def run(self):
