@@ -60,7 +60,7 @@ class Setting(object):
         if 'node_name' in data and \
            'node_addr' in data and \
            'server_addr' in data and \
-           'server_port' in data and \
+           'com_port' in data and \
            'token' in data and \
            'external_process' in data:
 
@@ -68,7 +68,7 @@ class Setting(object):
                 Setting.__node_name = data['node_name']
                 Setting.__node_address = data['node_addr']
                 Setting.__com_addr = data['server_addr']
-                Setting.__com_port = data['server_port']
+                Setting.__com_port = data['com_port']
                 Setting.__dynamic_token = data['token']
 
             except Exception as e:
@@ -91,7 +91,7 @@ class Setting(object):
         Setting.__node_name = new_name
 
     @staticmethod
-    def get_com_addr():
+    def get_server_addr():
         return Setting.__com_addr
 
     @staticmethod

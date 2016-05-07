@@ -112,7 +112,7 @@ class RESTService(object):
         api.add_route('/report', ReportStat())
 
         # Establishing a REST server
-        self.__server = make_server(Setting.get_com_addr(), Setting.get_com_port(), api)
+        self.__server = make_server(Setting.get_node_addr(), Setting.get_com_port(), api)
         self.__commander = commander
 
     def run(self):
