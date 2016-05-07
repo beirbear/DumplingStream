@@ -78,6 +78,7 @@ def update_client_status():
         # Update new master node
         ClientActivity.update_master()
     """
+    pass
 
 def parallel_request(attributes):
     """

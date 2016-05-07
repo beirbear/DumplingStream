@@ -121,7 +121,6 @@ class Definition(object):
 
             return params_dict
 
-
     class ClientList(object):
 
         @staticmethod

@@ -33,6 +33,7 @@ class LocalFileDataSource(DataSource):
             source_folder += '/'
         self.__source_folder = source_folder
         self.__index = 0
+        print("{0} Local Files Register.".format(len(self.__source_files)))
 
     def get_data(self, byte_object, file_idx):
         """
