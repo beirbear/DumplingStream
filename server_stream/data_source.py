@@ -27,13 +27,14 @@ class LocalFileDataSource(DataSource):
         if not os.path.isdir(source_folder):
             raise Exception("Input folder in data source does not exist!")
 
-        import glob
-        self.__source_files = glob.glob(source_folder + '*.' + file_extension)
         if source_folder[-1] != '/':
             source_folder += '/'
+
+        import glob
+        self.__source_files = glob.glob(source_folder + '*.' + file_extension)
         self.__source_folder = source_folder
         self.__index = 0
-        print("{0} Local Files Register.".format(len(self.__source_files)))
+        print("{0} local files register.".format(len(self.__source_files)))
 
     def get_data(self, byte_object, file_idx):
         """
