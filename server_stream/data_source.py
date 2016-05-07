@@ -35,6 +35,8 @@ class LocalFileDataSource(DataSource):
         self.__source_folder = source_folder
         self.__index = 0
         print("{0} local files register.".format(len(self.__source_files)))
+        if len(self.__source_files) == 0:
+            raise Exception("ERR-SrcFiles: There is no file in the folder with a specified extension.")
 
     def get_data(self, byte_object, file_idx):
         """
