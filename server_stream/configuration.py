@@ -14,7 +14,7 @@ class Setting(object):
         if not os.path.exists("server_stream/configuration.json"):
             raise Exception("configuration.json does not exist!")
 
-        with open("server_stream/configuration.json","rt") as t:
+        with open("server_stream/configuration.json", "rt") as t:
             data = eval(t.read())
 
         # check for the parameters
@@ -46,6 +46,8 @@ class Setting(object):
 
             except:
                 raise Exception("Invalid type in configuration.")
+        else:
+            print("ERR-Conf: Invalid parameter in configuration file.")
 
     @staticmethod
     def get_data_port():
