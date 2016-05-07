@@ -42,6 +42,7 @@ class ClientsUpdate(object):
             res.content_type = "String"
             res.status = falcon.HTTP_401
         """
+        pass
 
     def on_post(self, req, res):
         """
