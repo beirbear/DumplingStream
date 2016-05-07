@@ -7,7 +7,7 @@ class Setting(object):
     __processing_time_max_record = 200
 
     class ExternalProcess(object):
-        __process_command = ['python', '/Users/beir/PycharmProjects/DumplingStream/client_stream/computational/feature_creation.py']
+        __process_command = ['python', '/home/ubuntu/DumplingStream/client_stream/computational/feature_creation.py']
         __success_return_code = 0
         __max_worker = 8
 

@@ -298,13 +298,23 @@ def push_feature_to_repo(url, features):
 # handle the error case. connection.read() will still contain data
 # if any was returned, but it probably won't be of any use
 
+def get_parameters(input_url):
+    tmp = input_url.split("/")[2].split(":")
+    return { "addr": tmp[0], "port": tmp[1] }
 
 def main(argv):
-    url = argv[0]
+    """
+    The specified parameter must conform to the url format. "http://localhost:8080/request?id=0&token=None"
+    :param argv: request string in urm format
+    :return: Success or Fail
+    """
+    if len(argv) != 1:
+        raise Exception("Application require one parameter.")
 
-    items = ('localhost', 9999, "http://localhost:8080/request?id=0&token=None")
-
-    ip, port, message = items
+    message = argv[0]
+    params = get_parameters(argv[0])
+    ip = params['addr']
+    port = params['port']
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((ip, port))
