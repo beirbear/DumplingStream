@@ -114,8 +114,8 @@ class WebServer(object):
         api.add_route('/' + Definition.ClientList.get_string_update(), ClientsUpdate())
 
         # Need to change to this code when we run on the actual server
-        self.__server = make_server(Setting.get_com_addr(), 8090, api)
-        # self.__server = make_server(Setting.get_com_addr(), Setting.get_com_port(), api)
+        # self.__server = make_server(Setting.get_com_addr(), 8090, api)
+        self.__server = make_server(Setting.get_com_addr(), Setting.get_com_port(), api)
 
     def run(self):
         print("Server REST Service Enable")

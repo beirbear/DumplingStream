@@ -1,7 +1,7 @@
 {
   "node_name" : "Node1",
-  "node_addr" : "localhost",
-  "server_addr" : "127.0.0.1",
+  "node_addr" : "10.0.10.25",
+  "server_addr" : "10.0.10.220",
   "server_port" : 8080,
   "token" : "None",
   "external_process" : {

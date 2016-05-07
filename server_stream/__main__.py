@@ -29,7 +29,7 @@ def update_client_status():
     """
     This function will update client by send a request to clients repeatedly
     """
-
+    """
     def get_client_status(address):
         print("Request for client status update: ", address)
         res = None
@@ -72,12 +72,12 @@ def update_client_status():
                                                       load5=client_load5,
                                                       load15=client_load15)
 
-                    from .client_active_list import ClientActivity
-                    ClientActivity.set_client_activity(client_address, client_info)
+                    # from .client_active_list import ClientActivity
+                    # ClientActivity.set_client_activity(client_address, client_info)
 
         # Update new master node
         ClientActivity.update_master()
-
+    """
 
 def parallel_request(attributes):
     """
@@ -155,7 +155,7 @@ def main():
 
     # Prepare data source
     from .data_source import LocalFileDataSource
-    data_source = LocalFileDataSource(source_folder='/Users/beir/Desktop/data_source', file_extension='p')
+    data_source = LocalFileDataSource(source_folder='/home/ubuntu/data_source', file_extension='p')
 
     # Start Server Socket
     pool.submit(run_server_socket(data_source))
