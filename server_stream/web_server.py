@@ -31,6 +31,7 @@ class ClientsUpdate(object):
         """
         GET: /status?token=None
         """
+        """
         if req.params[Definition.ObjectDefinition.get_string_object_token()] == Setting.get_token():
             from .client_active_list import ClientActivity
             res.body = ClientActivity.get_all_client_keys()
@@ -40,6 +41,7 @@ class ClientsUpdate(object):
             res.body = "Invalid token ID."
             res.content_type = "String"
             res.status = falcon.HTTP_401
+        """
 
     def on_post(self, req, res):
         """
@@ -112,7 +114,8 @@ class WebServer(object):
         api.add_route('/' + Definition.ClientList.get_string_update(), ClientsUpdate())
 
         # Need to change to this code when we run on the actual server
-        self.__server = make_server(Setting.get_com_addr(), Setting.get_com_port(), api)
+        self.__server = make_server(Setting.get_com_addr(), 8090, api)
+        # self.__server = make_server(Setting.get_com_addr(), Setting.get_com_port(), api)
 
     def run(self):
         print("Server REST Service Enable")

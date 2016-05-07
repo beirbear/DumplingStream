@@ -12,13 +12,25 @@ class Setting(object):
         __max_worker = 8
 
         @staticmethod
+        def get_external_process():
+            return Setting.ExternalProcess.__process_command
+
+        @staticmethod
+        def get_success_return_code():
+            return Setting.ExternalProcess.__success_return_code
+
+        @staticmethod
         def get_max_worker():
             return Setting.ExternalProcess.__max_worker
 
         @staticmethod
         def read_configuration_from_file():
+            # Check that the configuration file exist or not
+            import os.path
+            if not os.path.exists("client_stream/configuration.json"):
+                raise Exception("configuration.json doesn't exist.")
 
-            with open('configuration.json', 'rt') as t:
+            with open('client_stream/configuration.json', 'rt') as t:
                 data = eval(t.read())
 
             if 'node_name' in data and \

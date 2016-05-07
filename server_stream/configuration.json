@@ -1,4 +1,9 @@
 {
-  "standard_idel_time": 60,
-
+  "com_addr": "localhost",
+  "com_port": 8080,
+  "data_addr": "localhost",
+  "data_port": 9999,
+  "standard_idel_time": 5,
+  "update_client_status_latency": 60,
+  "token": "None"
 }

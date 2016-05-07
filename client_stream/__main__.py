@@ -32,7 +32,6 @@ def run_rest_service(commander):
     rest = RESTService(commander)
     rest.run()
 
-
 if __name__ == "__main__":
 
     # Read configuration from file

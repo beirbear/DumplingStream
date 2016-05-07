@@ -107,10 +107,13 @@ def parallel_request(attributes):
     from .request_content import RequestContent
     url_string = RequestContent(file_id, target_client)
 
-    print("Callback to {0}: {1}".format(target_client, str(url_string)))
+    print("STD-ReqCallback: Push {1} to {0}".format(target_client, str(url_string)))
 
+    """ temporary disable this
     while not submit_request(url_string):
         time.sleep(5)
+    """
+    submit_request(url_string)
 
 
 def run_server_socket(data_source):
@@ -119,13 +122,15 @@ def run_server_socket(data_source):
     """
     from .server_socket import ThreadedTCPServer, ThreadedTCPRequestHandler
     server = ThreadedTCPServer((Setting.get_data_addr(), Setting.get_data_port()),
-                               ThreadedTCPRequestHandler(data_source), bind_and_activate=True)
+                               ThreadedTCPRequestHandler, bind_and_activate=True)
+
+    server.mycustomdata = data_source
 
     # Start a thread with the server -- that thread will then start one
     server_thread = threading.Thread(target=server.serve_forever)
 
     # Exit the server thread when the main thread terminates
-    # server_thread.daemon = True
+    server_thread.daemon = True
     server_thread.start()
 
     """ Have to test for graceful termination. """
@@ -142,12 +147,15 @@ def main():
 
     print("Running... Server Stream")
 
+    # Read configuration from file
+    Setting.read_configuration_from_file()
+
     from concurrent.futures import ThreadPoolExecutor
     pool = ThreadPoolExecutor()
 
     # Prepare data source
     from .data_source import LocalFileDataSource
-    data_source = LocalFileDataSource(source_folder='/Users/beir/Desktop/tmp/samples_data/')
+    data_source = LocalFileDataSource(source_folder='/Users/beir/Desktop/data_source', file_extension='p')
 
     # Start Server Socket
     pool.submit(run_server_socket(data_source))

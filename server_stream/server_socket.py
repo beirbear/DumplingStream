@@ -1,6 +1,5 @@
 import socketserver
-from .data_source import DataSource
-
+from .configuration import Definition, Setting
 
 class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     """
@@ -14,34 +13,33 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
     This class is the main class that handle with requests from clients.
     the actual mechanism that pass the data to clients.
     """
-    def __init__(self, data_source):
-        """
-        Purpose: initialize the request handler.
-        :param data_source: the data source object that can access to the data source
-        """
-        if not isinstance(data_source, DataSource):
-            raise Exception("Invalid DataSource")
-
-        self.__data_source = data_source
 
     def handle(self):
         # Receive and interpret the request data
         # 2048 is the standard size of the TCP
         data = str(self.request.recv(2048), 'utf-8')
 
-        """ Send content back to the client
+        # Read the request and extract parameter
+        params = Definition.ObjectDefinition.get_object_item(data)
 
-        content = None
-        m = hashlib.md5()
-        m.update(contents[int(data)])
-        print("{0}:{1}".format(data, m.hexdigest()))
+        # Check for token
+        if params[Definition.ObjectDefinition.get_string_object_token()] == Setting.get_token():
+            print("STD-ObjReq: Pushing content (id: {0}) to {1}".format(params[Definition.ObjectDefinition.get_string_object_id()],
+                                                                        self.client_address[0]))
 
-        cur_thread = threading.current_thread()
-        # response = bytes("{}: {}".format(cur_thread.name, data), 'utf-8')
-        #print("Send file content {0} back".format(data))
-        #print("Current Thread", cur_thread.name)
-        self.request.sendall(contents[int(data)])
-        # self.request.send(b"")
-        """
+            if self.server.mycustomdata.is_valid_file_id(params[Definition.ObjectDefinition.get_string_object_id()]):
+                content = bytearray()
+                self.server.mycustomdata.get_data(content,
+                                                  params[Definition.ObjectDefinition.get_string_object_id()])
+                self.request.sendall(content)
+                self.request.send(b"")
 
+            else:
+                print("ERR-ObjReq: Invalid Token")
+                self.request.sendall("Invalid token.")
+                self.request.send(b"")
 
+        else:
+            print("ERR-ObjReq: Invalid Token")
+            self.request.sendall("Invalid token.")
+            self.request.send(b"")

@@ -1,7 +1,10 @@
-import sys
-import numpy as np
 import urllib2
 import cPickle as pickle
+import socket
+import sys
+import time
+import numpy as np
+
 
 # Local Configuration ------------------------------------------------
 class DataRepositorySetting:
@@ -299,11 +302,32 @@ def push_feature_to_repo(url, features):
 def main(argv):
     url = argv[0]
 
-    response = urllib2.urlopen(url)
+    items = ('localhost', 9999, "http://localhost:8080/request?id=0&token=None")
 
-    tmp = response.read()
-    # print tmp
+    ip, port, message = items
 
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((ip, port))
+    sock.sendall(message)
+
+    try:
+        content = bytearray()
+        response = sock.recv(2048)
+
+        while response != b"":
+            content += response
+            response = sock.recv(2048)
+
+        print("Content Length:", len(content))
+
+        sock.close()
+    finally:
+        sock.close()
+        # break
+
+    print "Socket Client Complete."
+
+    """
     raw_object = pickle.loads(tmp)
     # print "Fetching a request from", url
 
@@ -312,6 +336,6 @@ def main(argv):
 
     # Push content
     push_feature_to_repo(url, feature_vectors)
-
+    """
 if __name__ == '__main__':
     main(sys.argv[1:])

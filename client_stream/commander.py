@@ -34,6 +34,7 @@ class Commander(object):
                                                           token)
         self.thread_pool.map(get_object_pipeline, (url,))
 
+
 def get_object_pipeline(items):
     """
     This is a function that we throw into a process pool for parallel processing.
@@ -42,12 +43,12 @@ def get_object_pipeline(items):
     # print("Invoke external process with parameters:", url)
     # Capture start processing time
     start_time = time.time()
-    from .configuration import Definition
-    cmd = Definition.ExternalProcess.get_external_process() + [url]
+    from .configuration import Setting
+    cmd = Setting.ExternalProcess.get_external_process() + [url]
     return_code = subprocess.call(cmd)
 
     # Check for return code
-    if return_code != Definition.ExternalProcess.get_success_return_code():
+    if return_code != Setting.ExternalProcess.get_success_return_code():
         raise Exception("Unsuccessful exit code received.")
     else:
         import datetime
