@@ -1,9 +1,9 @@
 
 class Setting(object):
     __com_addr = "localhost"
-    __com_port = 8080
+    __com_port = 4001
     __data_addr = "localhost"
-    __data_port = 9999
+    __data_port = 5555
     __update_client_status_latency = 60
     __standard_idle_time = 5
     __dynamic_token = "None"

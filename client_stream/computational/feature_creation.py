@@ -16,7 +16,67 @@ system_parameter = { "server_addr": None,
                      "node_name": None,
                      "token": None }
 content = bytearray()
-features = None
+
+
+# Model (Embedded the model, other, application cannot read the object)
+class hes1(pyurdme.URDMEModel):
+    def __init__(self, model_name="hes1", gamma=6e-1, P_start=200, m_start=10, k1_e=1.e9, k2_e=0.1, alpha_m_e=3.0, alpha_m_gamma_e=3. / 30., alpha_p_e=1.0, mu_m_e=0.015, mu_p_e=0.043):
+        pyurdme.URDMEModel.__init__(self, model_name)
+        self.P_start = P_start
+        self.m_start = m_start
+
+        self.D = gamma
+        # Species
+        Pf = pyurdme.Species(name="Pf", diffusion_constant=0., dimension=3)
+        Po = pyurdme.Species(name="Po", diffusion_constant=0., dimension=3)
+        mRNA = pyurdme.Species(name="mRNA", diffusion_constant=gamma, dimension=3)
+        protein = pyurdme.Species(name="protein", diffusion_constant=gamma, dimension=3)
+        self.add_species([Pf, Po, mRNA, protein])
+
+        # Mesh
+        # basedir = os.path.dirname(os.path.abspath(__file__))
+        self.mesh = pyurdme.URDMEMesh.read_mesh("/home/ubuntu/lab" + "/mesh/cell_coarse.xml")
+        # self.mesh = pyurdme.URDMEMesh.read_mesh("shared/mesh/cell_coarse.xml")
+        # Domains markers
+        nucleus = [2]
+        cytoplasm = [1]
+        promoter_site = [3]
+        # Domains
+        self.add_subdomain(Nucleus(), nucleus[0])
+        self.get_subdomain_vector()
+        self.sd[self.mesh.closest_vertex([0, 0, 0])] = promoter_site[0]
+        self.subdomains = {}
+
+        # Parameters
+        k1 = pyurdme.Parameter(name="k1", expression=k1_e)
+        k2 = pyurdme.Parameter(name="k2", expression=k2_e)
+        alpha_m = pyurdme.Parameter(name="alpha_m", expression=alpha_m_e)
+        alpha_m_gamma = pyurdme.Parameter(name="alpha_m_gamma", expression=alpha_m_gamma_e)
+        alpha_p = pyurdme.Parameter(name="alpha_p", expression=alpha_p_e)
+        mu_m = pyurdme.Parameter(name="mu_m", expression=mu_m_e)
+        mu_p = pyurdme.Parameter(name="mu_p", expression=mu_p_e)
+        self.add_parameter([k1, k2, alpha_m, alpha_m_gamma, alpha_p, mu_m, mu_p])
+
+        # Reactions
+        R1 = pyurdme.Reaction(name="R1", reactants={Pf: 1, protein: 1}, products={Po: 1}, massaction=True, rate=k1, restrict_to=promoter_site)
+        R2 = pyurdme.Reaction(name="R2", reactants={Po: 1}, products={Pf: 1, protein: 1}, massaction=True, rate=k2, restrict_to=promoter_site)
+        R3 = pyurdme.Reaction(name="R3", reactants={Pf: 1}, products={Pf: 1, mRNA: 1}, massaction=True, rate=alpha_m, restrict_to=promoter_site)
+        R4 = pyurdme.Reaction(name="R4", reactants={Po: 1}, products={Po: 1, mRNA: 1}, massaction=True, rate=alpha_m_gamma, restrict_to=promoter_site)
+        R5 = pyurdme.Reaction(name="R5", reactants={mRNA: 1}, products={mRNA: 1, protein: 1}, massaction=True, rate=alpha_p, restrict_to=cytoplasm)
+        R6 = pyurdme.Reaction(name="R6", reactants={mRNA: 1}, products={}, massaction=True, rate=mu_m)
+        R7 = pyurdme.Reaction(name="R7", reactants={protein: 1}, products={}, massaction=True, rate=mu_p)
+        self.add_reaction([R1, R2, R3, R4, R5, R6, R7])
+
+        # Restrict to promoter_site
+        self.restrict(Po, promoter_site)
+        self.restrict(Pf, promoter_site)
+
+        # Distribute molecules over the mesh
+        self.set_initial_condition_scatter({Pf: 1}, promoter_site)
+        self.set_initial_condition_scatter({protein: P_start}, cytoplasm)
+        self.set_initial_condition_scatter({mRNA: m_start}, nucleus)
+
+        self.timespan(range(400))
 
 
 class Definitions(object):
@@ -31,7 +91,7 @@ class Definitions(object):
 
     @staticmethod
     def get_data_repo_port():
-        return 8080
+        return 4001
 
     @staticmethod
     def get_string_service_name():
@@ -114,7 +174,7 @@ class ServiceMethods(object):
         return None
 
     @staticmethod
-    def push_feature_to_repo(url):
+    def push_feature_to_repo(features):
         """
         Push the data to data
         :param url:
@@ -144,73 +204,6 @@ class ServiceMethods(object):
 
         while not send_data_to_repo():
             time.sleep(5)
-
-
-    # Model (Embedded the model, other, application cannot read the object)
-    class hes1(pyurdme.URDMEModel):
-        def __init__(self, model_name="hes1", gamma=6e-1, P_start=200, m_start=10, k1_e=1.e9, k2_e=0.1, alpha_m_e=3.0,
-                     alpha_m_gamma_e=3. / 30., alpha_p_e=1.0, mu_m_e=0.015, mu_p_e=0.043):
-            pyurdme.URDMEModel.__init__(self, model_name)
-            self.P_start = P_start
-            self.m_start = m_start
-
-            self.D = gamma
-            # Species
-            Pf = pyurdme.Species(name="Pf", diffusion_constant=0., dimension=3)
-            Po = pyurdme.Species(name="Po", diffusion_constant=0., dimension=3)
-            mRNA = pyurdme.Species(name="mRNA", diffusion_constant=gamma, dimension=3)
-            protein = pyurdme.Species(name="protein", diffusion_constant=gamma, dimension=3)
-            self.add_species([Pf, Po, mRNA, protein])
-
-            # Mesh
-            # basedir = os.path.dirname(os.path.abspath(__file__))
-            self.mesh = pyurdme.URDMEMesh.read_mesh("/home/ubuntu/lab" + "/mesh/cell_coarse.xml")
-            # self.mesh = pyurdme.URDMEMesh.read_mesh("shared/mesh/cell_coarse.xml")
-            # Domains markers
-            nucleus = [2]
-            cytoplasm = [1]
-            promoter_site = [3]
-            # Domains
-            self.add_subdomain(Nucleus(), nucleus[0])
-            self.get_subdomain_vector()
-            self.sd[self.mesh.closest_vertex([0, 0, 0])] = promoter_site[0]
-            self.subdomains = {}
-
-            # Parameters
-            k1 = pyurdme.Parameter(name="k1", expression=k1_e)
-            k2 = pyurdme.Parameter(name="k2", expression=k2_e)
-            alpha_m = pyurdme.Parameter(name="alpha_m", expression=alpha_m_e)
-            alpha_m_gamma = pyurdme.Parameter(name="alpha_m_gamma", expression=alpha_m_gamma_e)
-            alpha_p = pyurdme.Parameter(name="alpha_p", expression=alpha_p_e)
-            mu_m = pyurdme.Parameter(name="mu_m", expression=mu_m_e)
-            mu_p = pyurdme.Parameter(name="mu_p", expression=mu_p_e)
-            self.add_parameter([k1, k2, alpha_m, alpha_m_gamma, alpha_p, mu_m, mu_p])
-
-            # Reactions
-            R1 = pyurdme.Reaction(name="R1", reactants={Pf: 1, protein: 1}, products={Po: 1}, massaction=True, rate=k1,
-                                  restrict_to=promoter_site)
-            R2 = pyurdme.Reaction(name="R2", reactants={Po: 1}, products={Pf: 1, protein: 1}, massaction=True, rate=k2,
-                                  restrict_to=promoter_site)
-            R3 = pyurdme.Reaction(name="R3", reactants={Pf: 1}, products={Pf: 1, mRNA: 1}, massaction=True,
-                                  rate=alpha_m, restrict_to=promoter_site)
-            R4 = pyurdme.Reaction(name="R4", reactants={Po: 1}, products={Po: 1, mRNA: 1}, massaction=True,
-                                  rate=alpha_m_gamma, restrict_to=promoter_site)
-            R5 = pyurdme.Reaction(name="R5", reactants={mRNA: 1}, products={mRNA: 1, protein: 1}, massaction=True,
-                                  rate=alpha_p, restrict_to=cytoplasm)
-            R6 = pyurdme.Reaction(name="R6", reactants={mRNA: 1}, products={}, massaction=True, rate=mu_m)
-            R7 = pyurdme.Reaction(name="R7", reactants={protein: 1}, products={}, massaction=True, rate=mu_p)
-            self.add_reaction([R1, R2, R3, R4, R5, R6, R7])
-
-            # Restrict to promoter_site
-            self.restrict(Po, promoter_site)
-            self.restrict(Pf, promoter_site)
-
-            # Distribute molecules over the mesh
-            self.set_initial_condition_scatter({Pf: 1}, promoter_site)
-            self.set_initial_condition_scatter({protein: P_start}, cytoplasm)
-            self.set_initial_condition_scatter({mRNA: m_start}, nucleus)
-
-            self.timespan(range(400))
 
     # Feature Creation ---------------------------------------------------
     @staticmethod
@@ -410,7 +403,6 @@ def main(argv):
         system_parameter["node_name"] = node_name
         system_parameter["token"] = token
 
-        global features
         global content
 
         ServiceMethods.get_data_from_server(message)
@@ -420,9 +412,10 @@ def main(argv):
         for item in ret.result:
             feature_list.append(ServiceMethods.g2(item))
 
-        # ServiceMethods.push_feature_to_repo(feature_list)
+        ServiceMethods.push_feature_to_repo(feature_list)
 
-    except:
+    except Exception as e:
+        print str(e)
         sys.stderr.write("Something went wrong into the system.")
         exit(-1)
 

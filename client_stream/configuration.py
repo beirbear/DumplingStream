@@ -2,7 +2,7 @@ class Setting(object):
     __node_name = 'Node1'
     __node_addr = 'localhost'
     __com_addr = '127.0.0.1'
-    __com_port = 8080
+    __com_port = 4001
     __dynamic_token = "None"
     __processing_time_max_record = 200
 
