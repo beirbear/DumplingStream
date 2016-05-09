@@ -40,7 +40,7 @@ class LocalFileDataSource(DataSource):
 
     def get_data(self, byte_object, file_idx):
         """
-        Get data from file and remove file from list.
+        Get data from the file.
         """
         if isinstance(byte_object, bytearray):
             with open(self.__source_files[file_idx], 'rb') as t:

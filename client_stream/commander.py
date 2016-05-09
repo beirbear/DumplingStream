@@ -39,12 +39,13 @@ def get_object_pipeline(items):
     """
     This is a function that we throw into a process pool for parallel processing.
     """
+
     url = items
     # print("Invoke external process with parameters:", url)
     # Capture start processing time
     start_time = time.time()
     from .configuration import Setting
-    cmd = Setting.ExternalProcess.get_external_process() + [url]
+    cmd = Setting.ExternalProcess.get_external_process() + [url, "server_address", "server_port", "node_name", "token"]
     return_code = subprocess.call(cmd)
 
     # Check for return code

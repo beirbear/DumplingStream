@@ -1,8 +1,8 @@
 {
   "com_addr": "10.0.10.220",
-  "com_port": 8080,
+  "com_port": 433,
   "data_addr": "10.0.10.220",
-  "data_port": 9999,
+  "data_port": 1010,
   "standard_idle_time": 5,
   "update_client_status_latency": 60,
   "token": "None"

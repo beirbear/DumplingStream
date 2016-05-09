@@ -2,7 +2,7 @@
   "node_name" : "Node1",
   "node_addr" : "10.0.10.25",
   "server_addr" : "10.0.10.220",
-  "com_port" : 8080,
+  "com_port" : 433,
   "token" : "None",
   "external_process" : {
     "ext_command" : ["python", "/home/ubuntu/DumplingStream/client_stream/computational/feature_creation.py"],

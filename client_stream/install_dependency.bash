@@ -22,3 +22,11 @@ git clone https://github.com/falconry/falcon.git
 # install on python 3.5 (The one that you just has installed)
 cd falcon
 sudo python3.5 setup.py install
+
+# You need to install molnutil to unpickle the object
+# MOLNS dependency
+
+# Swift client
+sudo pip install python-swiftclient
+# Ipython
+pip install ipython
