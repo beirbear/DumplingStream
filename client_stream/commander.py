@@ -45,8 +45,7 @@ def get_object_pipeline(items):
     # Capture start processing time
     start_time = time.time()
     from .configuration import Setting
-
-    cmd = Setting.ExternalProcess.get_external_process() + [url, "10.0.10.248", "4001", "node_name", "None"]
+    cmd = Setting.ExternalProcess.get_external_process() + [url, "10.0.10.248", "8080", "node_name", "None"]
     return_code = subprocess.call(cmd)
 
     # Check for return code
