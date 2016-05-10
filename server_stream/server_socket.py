@@ -29,8 +29,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
 
             if self.server.mycustomdata.is_valid_file_id(params[Definition.ObjectDefinition.get_string_object_id()]):
                 content = bytearray()
-                self.server.mycustomdata.get_data(content,
-                                                  params[Definition.ObjectDefinition.get_string_object_id()])
+                content = self.server.mycustomdata.get_data(content, params[Definition.ObjectDefinition.get_string_object_id()])
                 self.request.sendall(content)
                 self.request.send(b"")
 

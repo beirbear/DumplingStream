@@ -108,6 +108,7 @@ class LocalCachedDataSource(DataSource):
             b = bytearray()
             self.__get_data(b, i)
             self.__data.append(b)
+            break
         print("Load all {0} files complete.".format(len(self.__source_files)))
 
     def __get_data(self, byte_object, file_idx):
@@ -122,6 +123,7 @@ class LocalCachedDataSource(DataSource):
 
     def get_data(self, byte_object, file_index):
         byte_object = self.__data[file_index]
+        return byte_object
 
     def get_next_file_id(self):
         if self.__index < len(self.__source_files):
