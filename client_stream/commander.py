@@ -1,5 +1,6 @@
 import subprocess
 import time
+from .configuration import Setting
 
 
 class Commander(object):
@@ -13,8 +14,6 @@ class Commander(object):
         Initialization: define size of the worker node in the process pool
         """
         import concurrent.futures
-        from .configuration import Setting
-
         """Size of the worker nodes refer from the global setting in configuration file."""
         self.thread_pool = concurrent.futures.ProcessPoolExecutor(max_workers=Setting.ExternalProcess.get_max_worker())
 
@@ -25,40 +24,29 @@ class Commander(object):
 
         from server_stream.configuration import Definition as ss_d
         from .configuration import Definition as cs_d
-        url = "http://{0}:{1}/{2}?{3}={4}&{5}={6}".format(host,
-                                                          8090,
-                                                          ss_d.get_string_data_is_ready(),
-                                                          ss_d.ObjectDefinition.get_string_object_id(),
-                                                          object_name,
-                                                          cs_d.get_string_request_token(),
-                                                          token)
+        url = "/{0}?{1}={2}&{3}={4}".format(ss_d.get_string_data_is_ready(),
+                                            ss_d.ObjectDefinition.get_string_object_id(),
+                                            object_name,
+                                            cs_d.get_string_request_token(),
+                                            token)
         self.thread_pool.map(get_object_pipeline, (url,))
 
 
-def get_object_pipeline(items):
+def get_object_pipeline(item):
     """
     This is a function that we throw into a process pool for parallel processing.
     """
+    def call_ext_process():
+        from .configuration import Setting
+        cmd = Setting.ExternalProcess.get_external_process() + [item, Setting.get_server_addr(), Setting.get_com_port(),
+                                                                Setting.get_node_name(), Setting.get_token()]
+        return_code = subprocess.call(cmd)
 
-    url = items
-    # print("Invoke external process with parameters:", url)
-    # Capture start processing time
-    start_time = time.time()
-    from .configuration import Setting
-    cmd = Setting.ExternalProcess.get_external_process() + [url, "10.0.10.248", "8080", "node_name", "None"]
-    return_code = subprocess.call(cmd)
+        # Check for return code
+        if return_code != Setting.ExternalProcess.get_success_return_code():
+            return False
 
-    # Check for return code
-    if return_code != Setting.ExternalProcess.get_success_return_code():
-        raise Exception("Unsuccessful exit code received.")
-    else:
-        import datetime
-        start_time_string = str(datetime.datetime.now().time())
-        elapsed_time = time.time() - start_time
-        # print("Process completes in {0} seconds".format(elapsed_time))
+        return True
 
-        # Skip this part for now! -----------------------------------------
-        # Push it into the record system
-        # from .subprocess_processing_time import ProcessingTimeCollector
-        # ProcessingTimeCollector.add_info(start_time_string, elapsed_time)
-
+    while not call_ext_process():
+        time.sleep(Setting.ExternalProcess.get_idle_time())

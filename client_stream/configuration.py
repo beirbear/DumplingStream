@@ -10,6 +10,7 @@ class Setting(object):
         __process_command = ['python', '/home/ubuntu/DumplingStream/client_stream/computational/feature_creation.py']
         __success_return_code = 0
         __max_worker = 8
+        __idle_time = 5
 
         @staticmethod
         def get_external_process():
@@ -24,6 +25,10 @@ class Setting(object):
             return Setting.ExternalProcess.__max_worker
 
         @staticmethod
+        def get_idle_time():
+            return Setting.ExternalProcess.__idle_time
+
+        @staticmethod
         def read_configuration_from_file():
             # Check that the configuration file exist or not
             import os.path
@@ -36,12 +41,14 @@ class Setting(object):
             if 'external_process' in data and \
                'ext_command' in data['external_process'] and \
                'success_code' in data['external_process'] and \
+               'idle_time' in data['external_process'] and \
                'max_worker' in data['external_process']:
 
                 try:
                     Setting.ExternalProcess.__process_command = data['external_process']['ext_command']
                     Setting.ExternalProcess.__success_return_code = data['external_process']['success_code']
                     Setting.ExternalProcess.__max_worker = data['external_process']['max_worker']
+                    Setting.ExternalProcess.__idle_time = data['external_process']['idle_time']
 
                 except Exception as e:
                     raise Exception(e)

@@ -87,11 +87,11 @@ class Definitions(object):
 
     @staticmethod
     def get_data_repo_addr():
-        return '0.0.0.0'
+        return '10.0.10.240'
 
     @staticmethod
     def get_data_repo_port():
-        return 4001
+        return 8080
 
     @staticmethod
     def get_string_service_name():
@@ -116,6 +116,10 @@ class Definitions(object):
     @staticmethod
     def get_string_maker():
         return 'created_by'
+
+    @staticmethod
+    def get_success_return_code():
+        return 0
 
 
 class ServiceMethods(object):
@@ -394,6 +398,10 @@ def main(argv):
             sys.stderr.write("Invalid parameters.")
             exit(-1)
 
+        """
+        Note: I design the system to get server address and port from command line just in case when we change the
+        design to support of multiple server.
+        """
         global system_parameter
         system_parameter["server_addr"] = server_addr
         system_parameter["server_port"] = server_port
@@ -417,12 +425,12 @@ def main(argv):
     except Exception as e:
         print str(e)
         sys.stderr.write("Something went wrong into the system.")
-        exit(-1)
-
+        exit(1)
 
 if __name__ == '__main__':
     """
     Application entry point. Refer to the main method.
     """
     main(sys.argv[1:])
+    exit(Definitions.get_success_return_code())
 
