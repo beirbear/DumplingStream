@@ -38,7 +38,8 @@ def get_object_pipeline(item):
     """
     def call_ext_process():
         from .configuration import Setting
-        cmd = Setting.ExternalProcess.get_external_process() + [item, Setting.get_server_addr(), Setting.get_com_port(),
+        from server_stream.configuration import Setting as sss
+        cmd = Setting.ExternalProcess.get_external_process() + [item, Setting.get_server_addr(), sss.get_data_port(),
                                                                 Setting.get_node_name(), Setting.get_token()]
         return_code = subprocess.call(cmd)
 
