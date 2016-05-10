@@ -156,6 +156,8 @@ def main():
     while not data_source.is_done:
         target_client = clientList.get_client_addr()
         pool.submit(parallel_request, (data_source.get_next_file_id(), target_client))
+        # Sample of delay in data creation time.
+        time.sleep(0.5)
 
 if __name__ == "__main__":
     main()

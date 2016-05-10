@@ -87,7 +87,7 @@ class Definitions(object):
 
     @staticmethod
     def get_data_repo_addr():
-        return '10.0.10.240'
+        return '10.0.10.248'
 
     @staticmethod
     def get_data_repo_port():
@@ -164,8 +164,6 @@ class ServiceMethods(object):
         finally:
             sock.close()
             # break
-
-        print "Fetch data complete"
 
     @staticmethod
     def get_object_id_from_req(req_message):
@@ -420,8 +418,9 @@ def main(argv):
         for item in ret.result:
             feature_list.append(ServiceMethods.g2(item))
 
-        print "STD: Microbatch pushing data to data repository."
-        # ServiceMethods.push_feature_to_repo(feature_list)
+        ServiceMethods.push_feature_to_repo(feature_list)
+        print "STD: Microbatch push data to data repository successfully."
+
 
     except Exception as e:
         print str(e)
