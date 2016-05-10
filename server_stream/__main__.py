@@ -29,7 +29,7 @@ def update_client_status():
     """
     This function will update client by send a request to clients repeatedly
     """
-    """
+
     def get_client_status(address):
         print("Request for client status update: ", address)
         res = None
@@ -43,9 +43,24 @@ def update_client_status():
         return res.read().decode()
 
     # Actual Code -----
-    print("Client Status Updater Enabled.")
     while Setting.is_running:
         time.sleep(Setting.get_update_latency())
+        for item in clientList.client_list:
+            res = str(get_client_status(str(item)))
+            if len(res) > 0:
+                # Update
+                import json
+                json_respond = json.loads(res)
+                client_name = json_respond[Definition.ClientList.get_string_client_name()].strip()
+                client_address = json_respond[Definition.ClientList.get_string_client_addresss()].strip()
+                client_last_update = json_respond[Definition.ClientList.get_string_client_last_update()].strip()
+                client_load1 = json_respond[Definition.ClientList.get_string_client_load1()]
+                client_load5 = json_respond[Definition.ClientList.get_string_client_load5()]
+                client_load15 = json_respond[Definition.ClientList.get_string_client_load15()]
+
+                print(str(json_respond))
+
+        """
         from .client_active_list import ClientActivity
         for key, value in ClientActivity.get_all_clients():
             res = str(get_client_status(str(value)))
@@ -77,9 +92,7 @@ def update_client_status():
 
         # Update new master node
         ClientActivity.update_master()
-    """
-    pass
-
+        """
 
 def parallel_request(attributes):
     """
@@ -164,12 +177,9 @@ def main():
     pool.submit(run_rest_server)
 
     # Start monitoring client workload
-    """ Experiment """
-    # global client_activity
-    # pool.submit(update_client_status)
-    """ Experiment """
+    pool.submit(update_client_status)
 
-    # Start MixinServer
+    """ Start Streaming """
 
     # Wait until the system get registered by client
     while not clientList.has_client:
@@ -177,8 +187,8 @@ def main():
 
     # Start sending call back
     # while not data_source.is_done:
-    target_client = clientList.get_client_addr()
-    pool.submit(parallel_request, (data_source.get_next_file_id(), target_client))
+    # target_client = clientList.get_client_addr()
+    # pool.submit(parallel_request, (data_source.get_next_file_id(), target_client))
 
 
 if __name__ == "__main__":

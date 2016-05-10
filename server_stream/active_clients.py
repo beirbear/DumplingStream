@@ -1,4 +1,4 @@
-
+from .configuration import Setting, Definition
 
 class Singleton(type):
     """
@@ -35,6 +35,12 @@ class ClientRecord(object):
 
         return load
 
+    def __str__(self):
+        return "http://{0}:{1}/{2}?token={3}".format(self.address,
+                                                     Setting.get_com_port(),
+                                                     Definition.ClientList.get_string_update(),
+                                                     Setting.get_token())
+
 
 class ActiveClients(metaclass=Singleton):
     """
@@ -50,6 +56,10 @@ class ActiveClients(metaclass=Singleton):
             return True
 
         return False
+
+    @property
+    def client_list(self):
+        return self.__client_list
 
     def get_client_addr(self):
         if len(self.__client_list) == 0:

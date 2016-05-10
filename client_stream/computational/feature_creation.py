@@ -411,6 +411,7 @@ def main(argv):
         system_parameter["node_name"] = node_name
         system_parameter["token"] = token
 
+        print "STD: Microbatch getting data with request ", message, "."
         global content
         ServiceMethods.get_data_from_server(message)
         ret = pickle.loads(str(content))
@@ -419,6 +420,7 @@ def main(argv):
         for item in ret.result:
             feature_list.append(ServiceMethods.g2(item))
 
+        print "STD: Microbatch pushing data to data repository."
         # ServiceMethods.push_feature_to_repo(feature_list)
 
     except Exception as e:
