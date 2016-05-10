@@ -52,11 +52,9 @@ class RequestStatusUpdate(object):
         """
         Get machine status by calling a unix command and fetch for load average
         """
-        #res = subprocess.check_output(Setting.get_cpu_load_command())
-        #*_, load1, load5, load15 = res.split(b" ")
-        ## print("Load1: {0}, Load5: {1}, Load15: {2}".format(load1, load5, load15))
-        pass
-        # return load1, load5, load15
+        res = subprocess.check_output(Definition.get_cpu_load_command())
+        *_, load1, load5, load15 = res.split(b" ")
+        return load1, load5, load15
 
     def on_get(self, req, res):
         """
@@ -77,7 +75,7 @@ class RequestStatusUpdate(object):
                 import datetime
                 res_obj = {
                     ss_d.ClientList.get_string_client_name(): Setting.get_node_name(),
-                    ss_d.ClientList.get_string_client_addresss(): Setting.get_node_address(),
+                    ss_d.ClientList.get_string_client_addresss(): Setting.get_node_addr(),
                     ss_d.ClientList.get_string_client_last_update(): str(datetime.datetime.now()),
                     ss_d.ClientList.get_string_client_load1(): float(result[0]),
                     ss_d.ClientList.get_string_client_load5(): float(result[1]),
