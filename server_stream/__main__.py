@@ -20,7 +20,7 @@ def run_rest_server():
     """
     from .web_server import WebServer
 
-    print("REST Services is running...")
+    print("Enabling REST Services")
     web_server = WebServer()
     web_server.run()
 
@@ -80,6 +80,7 @@ def update_client_status():
     """
     pass
 
+
 def parallel_request(attributes):
     """
     This function will send a message to inform the client that the data is ready to be retrieved.
@@ -89,32 +90,29 @@ def parallel_request(attributes):
     def submit_request(url):
         # Sending request to server
         try:
-
             req = urllib.request.Request(url=url, data=b"", method='GET')
-            # print(req)
             ret = urllib.request.urlopen(req)
-            # print("ret", ret)
             if ret.status != 200:
-                print("Found non 200 status.")
+                print("ERR: Request for stream error with non 200 status.")
                 return False
 
         except Exception as e:
-            print("Exception:", e)
+            print("ERR: Request for stream error by the program.\n" + str(e))
             return False
 
         return True
 
-    # Prepare for REST string
+    """ Prepare the request command and REST string """
     from .request_content import RequestContent
     url_string = RequestContent(file_id, target_client)
 
-    print("STD-ReqCallback: Push {1} to {0}".format(target_client, str(url_string)))
+    print("STD: Sending request for stream with content \"{1}\" to {0}.".format(target_client, str(url_string)))
 
-    """ temporary disable this
     while not submit_request(url_string):
-        time.sleep(5)
-    """
-    submit_request(url_string)
+        print("ERR: Sending request for stream with content \"{1}\" to {0} error! Try again in {2}.".format(target_client,
+                                                                                                            str(url_string),
+                                                                                                            Setting.get_idle_time()))
+        time.sleep(Setting.get_idle_time())
 
 
 def run_server_socket(data_source):
@@ -125,6 +123,7 @@ def run_server_socket(data_source):
     server = ThreadedTCPServer((Setting.get_data_addr(), Setting.get_data_port()),
                                ThreadedTCPRequestHandler, bind_and_activate=True)
 
+    # Bind data source to the mixin server
     server.mycustomdata = data_source
 
     # Start a thread with the server -- that thread will then start one
@@ -138,7 +137,7 @@ def run_server_socket(data_source):
     # server.shutdown()
     # server.server_close()
 
-    print("Server Socket is running...")
+    print("Enabling Server Socket")
 
 
 def main():

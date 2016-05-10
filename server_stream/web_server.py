@@ -119,6 +119,5 @@ class WebServer(object):
         self.__server = make_server(Setting.get_com_addr(), Setting.get_com_port(), api)
 
     def run(self):
-        print("Server REST Service Enable")
         print("Ready.....\n\n")
         self.__server.serve_forever()

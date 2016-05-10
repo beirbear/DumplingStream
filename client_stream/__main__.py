@@ -11,7 +11,7 @@ def main():
     The main routine.
     """
     print("Running Client Stream")
-    print("Node name: ", Setting.get_node_name())
+    print("Client Name: ", Setting.get_node_name())
 
     # Create thread for handling REST Service
     from concurrent.futures import ThreadPoolExecutor

@@ -384,7 +384,7 @@ def main(argv):
     if len(argv) != 5:
         sys.stderr.write("""/Application require one parameter.
                             /Example: python feature_creation.py {request_string} {server_address} {server_port} {node_name} {token}""" + "\n")
-        exit(-1)
+        exit(3)
 
     # Strip Check just in case of user quotes a space
     try:
@@ -396,7 +396,7 @@ def main(argv):
 
         if len(message) == 0 or len(server_addr) == 0 or server_port == 0 or len(node_name) == 0 or len(token) == 0:
             sys.stderr.write("Invalid parameters.")
-            exit(-1)
+            exit(2)
 
         """
         Note: I design the system to get server address and port from command line just in case when we change the
@@ -412,7 +412,6 @@ def main(argv):
         system_parameter["token"] = token
 
         global content
-
         ServiceMethods.get_data_from_server(message)
         ret = pickle.loads(str(content))
 
@@ -420,7 +419,7 @@ def main(argv):
         for item in ret.result:
             feature_list.append(ServiceMethods.g2(item))
 
-        ServiceMethods.push_feature_to_repo(feature_list)
+        # ServiceMethods.push_feature_to_repo(feature_list)
 
     except Exception as e:
         print str(e)

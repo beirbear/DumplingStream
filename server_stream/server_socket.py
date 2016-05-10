@@ -24,8 +24,8 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
 
         # Check for token
         if params[Definition.ObjectDefinition.get_string_object_token()] == Setting.get_token():
-            print("STD-ObjReq: Pushing content (id: {0}) to {1}".format(params[Definition.ObjectDefinition.get_string_object_id()],
-                                                                        self.client_address[0]))
+            print("STD: Sending data (id: {0}) to {1}.".format(params[Definition.ObjectDefinition.get_string_object_id()],
+                                                                      self.client_address[0]))
 
             if self.server.mycustomdata.is_valid_file_id(params[Definition.ObjectDefinition.get_string_object_id()]):
                 content = bytearray()
@@ -35,11 +35,11 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                 self.request.send(b"")
 
             else:
-                print("ERR-ObjReq: Invalid Token")
+                print("ERR: Invalid Token.")
                 self.request.sendall("Invalid token.")
                 self.request.send(b"")
 
         else:
-            print("ERR-ObjReq: Invalid Token")
+            print("ERR: Invalid.")
             self.request.sendall("Invalid token.")
             self.request.send(b"")

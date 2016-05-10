@@ -116,6 +116,5 @@ class RESTService(object):
         self.__commander = commander
 
     def run(self):
-        print("Client REST Service Enable")
         print("Ready.....\n\n")
         self.__server.serve_forever()
