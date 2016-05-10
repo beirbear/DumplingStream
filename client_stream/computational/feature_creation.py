@@ -121,6 +121,10 @@ class Definitions(object):
     def get_success_return_code():
         return 0
 
+    @staticmethod
+    def get_idle_time():
+        return 5
+
 
 class ServiceMethods(object):
     """
@@ -128,10 +132,10 @@ class ServiceMethods(object):
     """
     @staticmethod
     def get_push_request_string():
-        return "http://{0}:{1}/{2}?{3}={4}&{5}={6}&{7}={8}&{9}={10}&{11}={12}"\
-                .format(Definitions.get_data_repo_addr,
-                        Definitions.get_data_repo_port,
-                        Definitions.get_string_service_name,
+        return "http://{0}:{1}/{2}?{3}={4}&{5}={6}&{7}={8}&{9}={10}&{11}={12}".format(
+                        Definitions.get_data_repo_addr(),
+                        Definitions.get_data_repo_port(),
+                        Definitions.get_string_service_name(),
                         Definitions.get_string_request_token(),
                         system_parameter["token"],
                         Definitions.get_string_id(),
@@ -205,7 +209,7 @@ class ServiceMethods(object):
             return False
 
         while not send_data_to_repo():
-            time.sleep(5)
+            time.sleep(Definitions.get_idle_time())
 
     # Feature Creation ---------------------------------------------------
     @staticmethod
