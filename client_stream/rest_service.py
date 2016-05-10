@@ -52,9 +52,10 @@ class RequestStatusUpdate(object):
         """
         Get machine status by calling a unix command and fetch for load average
         """
-        res = subprocess.check_output(Definition.get_cpu_load_command())
-        *_, load1, load5, load15 = res.split(b" ")
-        return str(load1), str(load5), str(load15)
+        res = str(subprocess.check_output(Definition.get_cpu_load_command())).strip()
+        res = res.replace(",", "").replace("\\n", "").replace("'", "")
+        *_, load1, load5, load15 = res.split(" ")
+        return load1, load5, load15
 
     def on_get(self, req, res):
         """

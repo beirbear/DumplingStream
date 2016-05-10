@@ -50,7 +50,6 @@ class ClientsUpdate(object):
         POST: /status?name={client_name}&address={client_address}&last_update={last_update}&
                 last_load1={number}&last_load5={number}&last_load15={number}&token=None
         """
-        print(str(req.params))
         if req.params[Definition.ObjectDefinition.get_string_object_token()] == Setting.get_token():
             # Unpack request parameters
             client_name = req.params[Definition.ClientList.get_string_client_name()].strip()
