@@ -3,13 +3,12 @@
   "node_addr" : "10.0.10.25",
   "server_addr" : "10.0.10.220",
   "com_port" : 8080,
-  "data_addr": "10.0.10.240",
-  "data_port" : 9999,
   "token" : "None",
   "external_process" : {
     "ext_command" : ["python", "/home/ubuntu/DumplingStream/client_stream/computational/feature_creation.py"],
     "success_code" : 0,
     "max_worker": 2,
-    "idle_time": 5
+    "idle_time": 5,
+    "data_port": 9999
   }
 }
