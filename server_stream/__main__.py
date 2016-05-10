@@ -153,10 +153,9 @@ def main():
         time.sleep(Setting.get_idle_time())
 
     # Start sending call back
-    # while not data_source.is_done:
-    # target_client = clientList.get_client_addr()
-    # pool.submit(parallel_request, (data_source.get_next_file_id(), target_client))
-
+    while not data_source.is_done:
+        target_client = clientList.get_client_addr()
+        pool.submit(parallel_request, (data_source.get_next_file_id(), target_client))
 
 if __name__ == "__main__":
     main()
