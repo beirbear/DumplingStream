@@ -58,41 +58,8 @@ def update_client_status():
                 client_load5 = json_respond[Definition.ClientList.get_string_client_load5()]
                 client_load15 = json_respond[Definition.ClientList.get_string_client_load15()]
 
-                print(str(json_respond))
+                clientList.register_client(client_name, client_address, client_last_update, client_load1, client_load5, client_load15)
 
-        """
-        from .client_active_list import ClientActivity
-        for key, value in ClientActivity.get_all_clients():
-            res = str(get_client_status(str(value)))
-            if len(res) > 0:
-                # Update
-                import json
-                json_respond = json.loads(res)
-                client_name = json_respond[Definition.ClientList.get_string_client_name()].strip()
-                client_address = json_respond[Definition.ClientList.get_string_client_addresss()].strip()
-                client_last_update = json_respond[Definition.ClientList.get_string_client_last_update()].strip()
-                client_load1 = json_respond[Definition.ClientList.get_string_client_load1()]
-                client_load5 = json_respond[Definition.ClientList.get_string_client_load5()]
-                client_load15 = json_respond[Definition.ClientList.get_string_client_load15()]
-
-                if len(client_name) > 0 and len(client_address) > 0 and len(client_last_update) > 0 \
-                        and client_load1 > 0 and client_load5 > 0 and client_load15 > 0:
-
-                    # Create object structure for client_list
-                    from .request_content import RequestClientStatus
-                    client_info = RequestClientStatus(name=client_name,
-                                                      address=client_address,
-                                                      last_update=client_last_update,
-                                                      load1=client_load1,
-                                                      load5=client_load5,
-                                                      load15=client_load15)
-
-                    # from .client_active_list import ClientActivity
-                    # ClientActivity.set_client_activity(client_address, client_info)
-
-        # Update new master node
-        ClientActivity.update_master()
-        """
 
 def parallel_request(attributes):
     """

@@ -49,6 +49,7 @@ class ActiveClients(metaclass=Singleton):
 
     def __init__(self):
         self.__client_list = list()
+        self.__client_index = 0
 
     @property
     def has_client(self):
@@ -68,7 +69,11 @@ class ActiveClients(metaclass=Singleton):
         return self.__client_list[self.__get_client_index()].address
 
     def __get_client_index(self):
-        return 0
+        self.__client_index += 1
+        if self.__client_index >= len(self.__client_list):
+            self.__client_index = 0
+
+        return self.__client_index
 
     def register_client(self, name, address, last_update, load1, load5, load15):
         # Check that is it empty list or not, if empty, just insert
