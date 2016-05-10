@@ -54,7 +54,7 @@ class RequestStatusUpdate(object):
         """
         res = subprocess.check_output(Definition.get_cpu_load_command())
         *_, load1, load5, load15 = res.split(b" ")
-        return load1, load5, load15
+        return str(load1), str(load5), str(load15)
 
     def on_get(self, req, res):
         """
