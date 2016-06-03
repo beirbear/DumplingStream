@@ -109,3 +109,4 @@ class ActiveClients(metaclass=Singleton):
             # Client not exist in the list yet. Just insert it
             self.__client_list.append(ClientRecord(name, address, last_update, load1, load5, load15))
             return 1
+

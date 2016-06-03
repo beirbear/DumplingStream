@@ -6,6 +6,7 @@ import urllib.request
 import urllib.error
 import time
 import threading
+import datetime
 from .configuration import Setting
 from .configuration import Definition
 
@@ -54,12 +55,18 @@ def update_client_status():
                 client_name = json_respond[Definition.ClientList.get_string_client_name()].strip()
                 client_address = json_respond[Definition.ClientList.get_string_client_addresss()].strip()
                 client_last_update = json_respond[Definition.ClientList.get_string_client_last_update()].strip()
+                client_last_update = eval(client_last_update)
                 client_load1 = json_respond[Definition.ClientList.get_string_client_load1()]
                 client_load5 = json_respond[Definition.ClientList.get_string_client_load5()]
                 client_load15 = json_respond[Definition.ClientList.get_string_client_load15()]
 
-                clientList.register_client(client_name, client_address, client_last_update, client_load1, client_load5, client_load15)
-
+                r = clientList.register_client(client_name, client_address, client_last_update, client_load1, client_load5, client_load15)
+                #if r == 1:
+                #    print('Register new client successful ({0}:{1})'.format(client_name, client_address))
+                #elif r == 2:
+                #    print('Update client status successful ({0}:{1})'.format(client_name, client_address))
+        for item in clientList.client_list:
+            print("{0}:{1} ({2},{3},{4})".format(item.name, item.address, item.load1, item.load5, item.load15))
 
 def parallel_request(attributes):
     """
