@@ -108,6 +108,7 @@ class LocalCachedDataSource(DataSource):
             b = bytearray()
             self.__get_data(b, i)
             self.__data.append(b)
+
         print("Load all {0} files complete.".format(len(self.__source_files)))
 
     def __get_data(self, byte_object, file_idx):

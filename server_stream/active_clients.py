@@ -1,4 +1,5 @@
 from .configuration import Setting, Definition
+from datetime import datetime
 
 class Singleton(type):
     """
@@ -76,6 +77,7 @@ class ActiveClients(metaclass=Singleton):
         return self.__client_index
 
     def register_client(self, name, address, last_update, load1, load5, load15):
+
         # Check that is it empty list or not, if empty, just insert
         if len(self.__client_list) == 0:
             self.__client_list.append(ClientRecord(name, address, last_update, load1, load5, load15))
@@ -90,6 +92,9 @@ class ActiveClients(metaclass=Singleton):
 
         if idx > -1:
             # Client already exist
+            if not isinstance(last_update, datetime):
+                return -2
+
             if self.__client_list[idx].last_update < last_update:
                 # Update the new info
                 self.__client_list[idx].last_update = last_update

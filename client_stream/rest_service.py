@@ -61,6 +61,16 @@ class RequestStatusUpdate(object):
         """
         GET: /status?token={None}
         """
+        def get_date_string():
+            cur_time = datetime.datetime.now()
+            return "datetime.datetime({0},{1},{2},{3},{4},{5},{6})".format(cur_time.year,
+                                                                           cur_time.month,
+                                                                           cur_time.day,
+                                                                           cur_time.hour,
+                                                                           cur_time.minute,
+                                                                           cur_time.second,
+                                                                           cur_time.microsecond)
+
         if req.params[Definition.get_string_request_token()] == Setting.get_token():
             if Definition.get_string_command() in req.params and \
                req.params[Definition.get_string_command()] == Definition.get_string_current_load():
@@ -77,7 +87,7 @@ class RequestStatusUpdate(object):
                 res_obj = {
                     ss_d.ClientList.get_string_client_name(): Setting.get_node_name(),
                     ss_d.ClientList.get_string_client_addresss(): Setting.get_node_addr(),
-                    ss_d.ClientList.get_string_client_last_update(): str(datetime.datetime.now()),
+                    ss_d.ClientList.get_string_client_last_update(): get_date_string(),
                     ss_d.ClientList.get_string_client_load1(): float(result[0]),
                     ss_d.ClientList.get_string_client_load5(): float(result[1]),
                     ss_d.ClientList.get_string_client_load15(): float(result[2]),
