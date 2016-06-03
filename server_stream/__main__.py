@@ -150,7 +150,7 @@ def main():
 
     # Prepare data source
     from .data_source import LocalCachedDataSource, LocalFileDataSource
-    data_source = LocalCachedDataSource(source_folder='/home/ubuntu/data_source', file_extension='p')
+    data_source = LocalCachedDataSource(source_folder='/home/ubuntu/utility/data_source', file_extension='p')
 
     # Start Server Socket
     pool.submit(run_server_socket(data_source))

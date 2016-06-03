@@ -176,7 +176,9 @@ class TupleRates(object):
     def get_delay(self):
         if self.__cur_rate == 0:
             self.__next_frame()
-            return 1000
+            return 1
         else:
             self.__cur_rate -= 1
+            if self.__cur_rate == 0:
+                self.__next_frame()
             return 0

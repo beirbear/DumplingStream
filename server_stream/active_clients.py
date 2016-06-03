@@ -54,7 +54,7 @@ class ActiveClients(metaclass=Singleton):
 
     @property
     def has_client(self):
-        if len(self.__client_list) == 4:
+        if len(self.__client_list) > 0:
             return True
 
         return False
