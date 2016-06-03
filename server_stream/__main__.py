@@ -127,6 +127,14 @@ def run_server_socket(data_source):
     print("Enabling Server Socket")
 
 
+def tuple_rate_loader():
+    """
+    This function create a tuple rate simulation by reading a tuple creation pattern from file.
+    The file must be in a list format and the number in the list refer to tuple creation rate in each second.
+    :return: Tuple Rate Object
+    """
+
+
 def main():
     """
     This is the main code of the application. Entry point function.
@@ -159,12 +167,17 @@ def main():
     while not clientList.has_client:
         time.sleep(Setting.get_idle_time())
 
+    # Mimic tuple rate creation
+    from .data_source import TupleRates
+    tuple_rate = TupleRates('tuple_steady.txt')
+
     # Start sending call back
     while not data_source.is_done:
         target_client = clientList.get_client_addr()
         pool.submit(parallel_request, (data_source.get_next_file_id(), target_client))
+
         # Sample of delay in data creation time.
-        # time.sleep(0.5)
+        time.sleep(tuple_rate.get_delay())
 
 if __name__ == "__main__":
     main()

@@ -1,7 +1,7 @@
 {
-  "com_addr": "10.0.10.220",
+  "com_addr": "192.168.1.196",
   "com_port": 8080,
-  "data_addr": "10.0.10.220",
+  "data_addr": "192.168.1.196",
   "data_port": 9999,
   "standard_idle_time": 5,
   "update_client_status_latency": 5,

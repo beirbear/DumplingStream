@@ -149,3 +149,34 @@ class LocalCachedDataSource(DataSource):
             return False
 
         return True
+
+
+class TupleRates(object):
+    """
+    This function create a tuple rate simulation by reading a tuple creation pattern from file.
+    The file must be in a list format and the number in the list refer to tuple creation rate in each second.
+    """
+    def __init__(self, tuple_rate_file):
+        import os.path
+        if not os.path.isfile(tuple_rate_file):
+            raise FileNotFoundError("{0} doesn't exist".format(tuple_rate_file))
+
+        with open(tuple_rate_file) as t:
+            self.__tuple_rate = eval(t.read())
+            self.__cur_rate = 0
+
+        self.__next_frame()
+
+    def __next_frame(self):
+        if len(self.__tuple_rate) > 0:
+            self.__cur_rate = self.__tuple_rate.pop(0)
+        else:
+            raise Exception("No tuple rate in the next frame")
+
+    def get_delay(self):
+        if self.__cur_rate == 0:
+            self.__next_frame()
+            return 1000
+        else:
+            self.__cur_rate -= 1
+            return 0
