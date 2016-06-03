@@ -32,7 +32,7 @@ def update_client_status():
     """
 
     def get_client_status(address):
-        print("Request for client status update: ", address)
+        # print("Request for client status update: ", address)
         res = None
         req = urllib.request.Request(url=address, data=b"", method='GET')
         try:
@@ -65,8 +65,8 @@ def update_client_status():
                 #    print('Register new client successful ({0}:{1})'.format(client_name, client_address))
                 #elif r == 2:
                 #    print('Update client status successful ({0}:{1})'.format(client_name, client_address))
-        for item in clientList.client_list:
-            print("{0}:{1} ({2},{3},{4})".format(item.name, item.address, item.load1, item.load5, item.load15))
+        # for item in clientList.client_list:
+        #     print("{0}:{1} ({2},{3},{4})".format(item.name, item.address, item.load1, item.load5, item.load15))
 
 def parallel_request(attributes):
     """
@@ -169,7 +169,7 @@ def main():
 
     # Mimic tuple rate creation
     from .data_source import TupleRates
-    tuple_rate = TupleRates('tuple_steady.txt')
+    tuple_rate = TupleRates('server_stream/tuple_steady.txt')
 
     # Start sending call back
     while not data_source.is_done:
