@@ -1,7 +1,7 @@
 {
   "node_name" : "Node1",
-  "node_addr" : "10.0.10.25",
-  "server_addr" : "10.0.10.220",
+  "node_addr" : "192.168.1.190",
+  "server_addr" : "192.168.1.96",
   "com_port" : 8080,
   "token" : "None",
   "external_process" : {

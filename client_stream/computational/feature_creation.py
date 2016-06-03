@@ -87,7 +87,7 @@ class Definitions(object):
 
     @staticmethod
     def get_data_repo_addr():
-        return '10.0.10.248'
+        return '192.168.1.205'
 
     @staticmethod
     def get_data_repo_port():
