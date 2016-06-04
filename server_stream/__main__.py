@@ -169,7 +169,7 @@ def main():
 
     # Mimic tuple rate creation
     from .data_source import TupleRates
-    tuple_rate = TupleRates('server_stream/tuple_steady.txt')
+    tuple_rate = TupleRates('server_stream/tuple_intermittent.txt')
 
     # Start sending call back
     while not data_source.is_done:
