@@ -84,7 +84,7 @@ class ActiveClients(metaclass=Singleton):
         if len(self.__client_list) == 0:
             return None
 
-        candidate_client = {"id": -1, "load": 0}
+        candidate_client = {"id": -1, "load": 0.0}
         for i, item in enumerate(self.__client_list):
             max = item.load1
             if item.load5 > max:
@@ -96,13 +96,14 @@ class ActiveClients(metaclass=Singleton):
                 candidate_client.id = i
                 candidate_client.load = max
 
-        self.__least_load_addr = self.client_list[candidate_client.id].address
+        self.__least_load_addr = self.__client_list[candidate_client.id].address
 
     def register_client(self, name, address, last_update, load1, load5, load15):
 
         # Check that is it empty list or not, if empty, just insert
         if len(self.__client_list) == 0:
             self.__client_list.append(ClientRecord(name, address, last_update, load1, load5, load15))
+            self.__update_least_load_addr()
             return 1
 
         addr_list = [item.address for item in self.__client_list]
