@@ -150,7 +150,10 @@ def main():
 
     # Prepare data source
     from .data_source import LocalCachedDataSource, LocalFileDataSource
+    time1 = time.time()
     data_source = LocalCachedDataSource(source_folder='/home/ubuntu/utility/data_source', file_extension='p')
+    time2 = time.time()
+    print("Loading file took: {0} seconds.".format(time2 - time1))
 
     # Start Server Socket
     pool.submit(run_server_socket(data_source))
@@ -169,7 +172,7 @@ def main():
 
     # Mimic tuple rate creation
     from .data_source import TupleRates
-    tuple_rate = TupleRates('server_stream/tuple_intermittent.txt')
+    tuple_rate = TupleRates('server_stream/tuple_explode.txt')
 
     # Start sending call back
     while not data_source.is_done:
