@@ -92,11 +92,11 @@ class ActiveClients(metaclass=Singleton):
             if item.load15 > max:
                 max = item.load15
 
-            if max > candidate_client.load:
-                candidate_client.id = i
-                candidate_client.load = max
+            if max > candidate_client['load']:
+                candidate_client['id'] = i
+                candidate_client['load'] = max
 
-        self.__least_load_addr = self.__client_list[candidate_client.id].address
+        self.__least_load_addr = self.__client_list[candidate_client['id']].address
 
     def register_client(self, name, address, last_update, load1, load5, load15):
 
