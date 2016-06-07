@@ -176,7 +176,7 @@ def main():
 
     # Start sending call back
     while not data_source.is_done:
-        target_client = clientList.get_client_addr()
+        target_client = clientList.get_least_load_client()
         pool.submit(parallel_request, (data_source.get_next_file_id(), target_client))
 
         # Sample of delay in data creation time.

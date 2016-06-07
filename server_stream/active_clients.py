@@ -51,6 +51,7 @@ class ActiveClients(metaclass=Singleton):
     def __init__(self):
         self.__client_list = list()
         self.__client_index = 0
+        self.__least_load_addr = None
 
     @property
     def has_client(self):
@@ -69,12 +70,33 @@ class ActiveClients(metaclass=Singleton):
 
         return self.__client_list[self.__get_client_index()].address
 
+    def get_least_load_client(self):
+        return self.__least_load_addr
+
     def __get_client_index(self):
         self.__client_index += 1
         if self.__client_index >= len(self.__client_list):
             self.__client_index = 0
 
         return self.__client_index
+
+    def __update_least_load_addr(self):
+        if len(self.__client_list) == 0:
+            return None
+
+        candidate_client = {"id": -1, "load": 0}
+        for i, item in enumerate(self.__client_list):
+            max = item.load1
+            if item.load5 > max:
+                max = item.load5
+            if item.load15 > max:
+                max = item.load15
+
+            if max > candidate_client.load:
+                candidate_client.id = i
+                candidate_client.load = max
+
+        self.__least_load_addr = self.client_list[candidate_client.id].address
 
     def register_client(self, name, address, last_update, load1, load5, load15):
 
@@ -102,6 +124,8 @@ class ActiveClients(metaclass=Singleton):
                 self.__client_list[idx].load1 = load1
                 self.__client_list[idx].load5 = load5
                 self.__client_list[idx].load15 = load15
+                self.__update_least_load_addr()
+
                 return 2
             else:
                 return -2
